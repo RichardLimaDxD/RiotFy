@@ -17,11 +17,10 @@ export class CreateMusicDto {
   year: string;
 
   @IsOptional()
+  @IsString()
   cover_image: string | null;
 
   @IsOptional()
-  music_url: string | null;
-
   @IsString()
-  user_id: string;
+  music_url: string | null;
 }

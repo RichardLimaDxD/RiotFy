@@ -5,8 +5,8 @@ import { MusicsRepository } from './repositories/musics.repository';
 @Injectable()
 export class MusicsService {
   constructor(private musicsRepository: MusicsRepository) {}
-  async create(data: CreateMusicDto) {
-    return await this.musicsRepository.create(data);
+  async create(data: CreateMusicDto, userId: string) {
+    return await this.musicsRepository.create(data, userId);
   }
 
   async findAll() {
