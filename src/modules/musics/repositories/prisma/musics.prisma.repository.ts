@@ -7,7 +7,7 @@ import { Injectable } from '@nestjs/common';
 @Injectable()
 export class MusicsPrismaRepository implements MusicsRepository {
   constructor(private prisma: PrismaService) {}
-  async create(data: CreateMusicDto): Promise<Music> {
+  async create(data: CreateMusicDto, userId: string): Promise<Music> {
     const music = new Music();
     Object.assign(music, {
       ...data,
@@ -23,7 +23,7 @@ export class MusicsPrismaRepository implements MusicsRepository {
         year: music.year,
         cover_image: music.cover_image,
         music_url: music.music_url,
-        userId: music.userId,
+        userId,
       },
     });
     return newMusic;
