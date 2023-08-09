@@ -1,6 +1,13 @@
 import { hashSync } from 'bcryptjs';
 import { Transform } from 'class-transformer';
-import { IsEmail, IsNotEmpty, IsString, MinLength } from 'class-validator';
+import {
+  IsBoolean,
+  IsEmail,
+  IsNotEmpty,
+  IsOptional,
+  IsString,
+  MinLength,
+} from 'class-validator';
 
 export class CreateUserDto {
   @IsString()
@@ -9,6 +16,10 @@ export class CreateUserDto {
   @IsString()
   @IsEmail()
   email: string;
+
+  @IsBoolean()
+  @IsOptional()
+  admin?: boolean;
 
   @IsString()
   @MinLength(8)

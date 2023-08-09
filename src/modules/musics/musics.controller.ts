@@ -18,6 +18,8 @@ export class MusicsController {
   @Post()
   @UseGuards(JwtauthGuard)
   async create(@Body() data: CreateMusicDto, @Request() req) {
+    console.log(req.user);
+
     return await this.musicsService.create(data, req.user.id);
   }
 
