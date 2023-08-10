@@ -11,6 +11,7 @@ import { UsersRepository } from './repositories/users.repository';
 @Injectable()
 export class UsersService {
   constructor(private usersRepository: UsersRepository) {}
+
   async create(createUserDto: CreateUserDto) {
     const findUser = await this.usersRepository.findByEmail(
       createUserDto.email,
@@ -35,6 +36,7 @@ export class UsersService {
     if (!findUser) {
       throw new NotFoundException('User not found!');
     }
+
     return findUser;
   }
 
@@ -69,12 +71,12 @@ export class UsersService {
   async remove(id: string, userId: string) {
     const findUser = await this.usersRepository.findOne(id);
 
-    if (!findUser) {
-      throw new NotFoundException('User not found!');
-    }
-
     if (id !== userId) {
       throw new ForbiddenException('Insufficient permission');
+    }
+
+    if (!findUser) {
+      throw new NotFoundException('User not found!');
     }
 
     return this.usersRepository.delete(id);

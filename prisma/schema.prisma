@@ -15,6 +15,7 @@ model User {
   name     String
   email    String
   password String
+  admin Boolean @default(false)
   music    Music[]
 
   @@map("users")
