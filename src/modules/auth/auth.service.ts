@@ -28,8 +28,12 @@ export class AuthService {
     if (!user) {
       throw new ForbiddenException('User not exist!');
     }
+
     return {
-      token: this.jwtService.sign({ email }, { subject: user.id }),
+      token: this.jwtService.sign(
+        { email, admin: user.admin },
+        { subject: user.id },
+      ),
     };
   }
 }

@@ -3,6 +3,7 @@ import { MusicsRepository } from '../musics.repository';
 import { Music } from '../../entities/music.entity';
 import { PrismaService } from 'src/database/prisma.service';
 import { Injectable } from '@nestjs/common';
+import { UpdateMusicDto } from '../../dtos/update-music.dto';
 
 @Injectable()
 export class MusicsPrismaRepository implements MusicsRepository {
@@ -39,5 +40,19 @@ export class MusicsPrismaRepository implements MusicsRepository {
       where: { id },
     });
     return music;
+  }
+
+  async update(id: string, data: UpdateMusicDto): Promise<Music> {
+    const music = await this.prisma.music.update({
+      where: { id },
+      data: { ...data },
+    });
+    return music;
+  }
+
+  async delete(id: string): Promise<void> {
+    await this.prisma.music.delete({
+      where: { id },
+    });
   }
 }
