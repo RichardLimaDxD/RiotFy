@@ -6,7 +6,6 @@ import {
   Patch,
   Param,
   Delete,
-  ParseUUIDPipe,
   UseGuards,
   Request,
 } from '@nestjs/common';
@@ -14,7 +13,11 @@ import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { JwtauthGuard } from '../auth/jwt-auth.guard';
+import { UserDecorator } from '../auth/decorators/userRetrieve.decorator';
+import { User } from './entities/user.entity';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 
+@ApiTags('Users')
 @Controller('users')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
@@ -24,20 +27,16 @@ export class UsersController {
     return this.usersService.create(createUserDto);
   }
 
-  @Get()
+  @Get('')
   @UseGuards(JwtauthGuard)
-  findAll() {
-    return this.usersService.findAll();
-  }
-
-  @Get(':id')
-  @UseGuards(JwtauthGuard)
-  findOne(@Param('id', ParseUUIDPipe) id: string) {
-    return this.usersService.findOne(id);
+  @ApiBearerAuth()
+  findOne(@UserDecorator() user: User) {
+    return this.usersService.findOne(user.id);
   }
 
   @Patch(':id')
   @UseGuards(JwtauthGuard)
+  @ApiBearerAuth()
   update(
     @Request() req,
     @Param('id') id: string,
@@ -48,6 +47,7 @@ export class UsersController {
 
   @Delete(':id')
   @UseGuards(JwtauthGuard)
+  @ApiBearerAuth()
   remove(@Request() req, @Param('id') id: string) {
     return this.usersService.remove(id, req.user.id);
   }
