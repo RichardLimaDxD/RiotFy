@@ -42,7 +42,7 @@ export class MusicsPrismaRepository implements MusicsRepository {
     return music;
   }
 
-  async update(id: string, data: UpdateMusicDto): Promise<Music> {
+  async update(data: UpdateMusicDto, id: string): Promise<Music> {
     const music = await this.prisma.music.update({
       where: { id },
       data: { ...data },
