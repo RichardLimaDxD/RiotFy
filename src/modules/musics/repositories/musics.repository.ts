@@ -10,10 +10,6 @@ export abstract class MusicsRepository {
   ): Promise<Music>;
   abstract findAll(): Promise<Music[]>;
   abstract findOne(id: string): Promise<Music>;
-  abstract update(
-    id: string,
-    data: UpdateMusicDto,
-    isAdmin: boolean,
-  ): Promise<Music>;
+  abstract update(data: UpdateMusicDto, id: string): Promise<Music>;
   abstract delete(id: string, isAdmin: boolean): Promise<void>;
 }
