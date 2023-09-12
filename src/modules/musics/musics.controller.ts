@@ -31,15 +31,11 @@ export class MusicsController {
   }
 
   @Get()
-  @UseGuards(JwtauthGuard)
-  @ApiBearerAuth()
   async findAll() {
     return await this.musicsService.findAll();
   }
 
   @Get(':id')
-  @UseGuards(JwtauthGuard)
-  @ApiBearerAuth()
   async findOne(@Param('id') id: string) {
     return await this.musicsService.findOne(id);
   }
