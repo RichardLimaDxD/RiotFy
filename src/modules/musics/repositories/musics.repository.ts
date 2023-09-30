@@ -11,5 +11,6 @@ export abstract class MusicsRepository {
   abstract findAll(): Promise<Music[]>;
   abstract findOne(id: string): Promise<Music>;
   abstract update(data: UpdateMusicDto, id: string): Promise<Music>;
+  abstract updateMusic(id: string, data: UpdateMusicDto): Promise<Music>;
   abstract delete(id: string, isAdmin: boolean): Promise<void>;
 }

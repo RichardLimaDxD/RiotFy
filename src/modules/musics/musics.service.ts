@@ -5,6 +5,7 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import { CreateMusicDto } from './dtos/create-music.dto';
+import { UpdateMusicDto } from './dtos/update-music.dto';
 import { MusicsRepository } from './repositories/musics.repository';
 import { v2 as cloudinary } from 'cloudinary';
 import { unlink } from 'fs';
@@ -86,6 +87,16 @@ export class MusicsService {
     });
 
     return updateMusic;
+  }
+
+  async updateMusic(id: string, updateMusicDto: UpdateMusicDto) {
+    const findMusic = await this.musicsRepository.findOne(id);
+
+    if (!findMusic) {
+      throw new NotFoundException('Music not found');
+    }
+
+    return this.musicsRepository.updateMusic(id, updateMusicDto);
   }
 
   async remove(id: string, isAdmin: boolean) {

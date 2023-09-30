@@ -49,20 +49,12 @@ export class UsersService {
   async update(id: string, updateUserDto: UpdateUserDto, userId: string) {
     const findUser = await this.usersRepository.findOne(id);
 
-    const findEmailUser = await this.usersRepository.findByEmail(
-      updateUserDto.email,
-    );
-
     if (id !== userId) {
       throw new ForbiddenException('Insufficient permission');
     }
 
     if (!findUser) {
       throw new NotFoundException('User not found!');
-    }
-
-    if (findEmailUser) {
-      throw new ConflictException('Email already exists');
     }
 
     return this.usersRepository.update(id, updateUserDto);

@@ -1,9 +1,9 @@
+import { UpdateMusicDto } from './../../dtos/update-music.dto';
 import { CreateMusicDto } from './../../dtos/create-music.dto';
 import { MusicsRepository } from '../musics.repository';
 import { Music } from '../../entities/music.entity';
 import { PrismaService } from 'src/database/prisma.service';
 import { Injectable } from '@nestjs/common';
-import { UpdateMusicDto } from '../../dtos/update-music.dto';
 
 @Injectable()
 export class MusicsPrismaRepository implements MusicsRepository {
@@ -31,7 +31,14 @@ export class MusicsPrismaRepository implements MusicsRepository {
   }
 
   async findAll(): Promise<Music[]> {
-    const musics = await this.prisma.music.findMany();
+    const musics = await this.prisma.music.findMany({
+      where: {
+        NOT: {
+          cover_image: null,
+          music_url: null,
+        },
+      },
+    });
     return musics;
   }
 
@@ -46,6 +53,21 @@ export class MusicsPrismaRepository implements MusicsRepository {
     const music = await this.prisma.music.update({
       where: { id },
       data: { ...data },
+    });
+    return music;
+  }
+
+  async updateMusic(
+    id: string,
+    updateMusicDto: UpdateMusicDto,
+  ): Promise<Music> {
+    const music = await this.prisma.music.update({
+      where: {
+        id,
+      },
+      data: {
+        ...updateMusicDto,
+      },
     });
     return music;
   }

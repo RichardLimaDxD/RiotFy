@@ -1,3 +1,4 @@
+import { NotFoundException } from '@nestjs/common';
 import { CreateMusicDto } from '../../dtos/create-music.dto';
 import { UpdateMusicDto } from '../../dtos/update-music.dto';
 import { Music } from '../../entities/music.entity';
@@ -24,6 +25,15 @@ export class MusicsInMemoryRepository implements MusicsRepository {
   async findOne(id: string): Promise<Music> {
     const music = this.database.find((music) => music.id === id);
     return music;
+  }
+
+  async updateMusic(id: string, data: UpdateMusicDto): Promise<Music> {
+    const musicIndex = this.database.findIndex((music) => music.id === id);
+
+    const updatedMusic = { ...this.database[musicIndex], ...data };
+    this.database[musicIndex] = updatedMusic;
+
+    return updatedMusic;
   }
 
   async delete(id: string): Promise<void> {

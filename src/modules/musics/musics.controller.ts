@@ -17,6 +17,7 @@ import { CreateMusicDto } from './dtos/create-music.dto';
 import { JwtauthGuard } from '../auth/jwt-auth.guard';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { FileFieldsInterceptor } from '@nestjs/platform-express';
+import { UpdateMusicDto } from './dtos/update-music.dto';
 
 @ApiTags('Musics')
 @Controller('musics')
@@ -63,6 +64,23 @@ export class MusicsController {
 
     const { cover_image, music } = files;
     return this.musicsService.update(cover_image[0], music[0], id);
+  }
+
+  @Patch(':id')
+  @UseGuards(JwtauthGuard)
+  @ApiBearerAuth()
+  async updateMusic(
+    @Param('id') id: string,
+    @Body() updateMusicDto: UpdateMusicDto,
+    @Request() req,
+  ) {
+    const admin = req.user.admin;
+
+    if (admin === false) {
+      throw new ForbiddenException('Insufficient permission');
+    }
+
+    return await this.musicsService.updateMusic(id, updateMusicDto);
   }
 
   @Delete(':id')
