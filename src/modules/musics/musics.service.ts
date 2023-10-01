@@ -1,4 +1,3 @@
-import { UpdateMusicDto } from './dtos/update-music.dto';
 import {
   ForbiddenException,
   Injectable,
@@ -6,6 +5,7 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import { CreateMusicDto } from './dtos/create-music.dto';
+import { UpdateMusicDto } from './dtos/update-music.dto';
 import { MusicsRepository } from './repositories/musics.repository';
 import { v2 as cloudinary } from 'cloudinary';
 import { unlink } from 'fs';
