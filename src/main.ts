@@ -6,7 +6,7 @@ import * as cors from 'cors';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
-
+  app.enableCors();
   const config = new DocumentBuilder()
     .setTitle('RiotFy')
     .setDescription('music player riot')
@@ -22,7 +22,7 @@ async function bootstrap() {
       transformOptions: { groups: ['transform'] },
     }),
   );
-  app.use(cors());
+
   await app.listen(3000);
 }
 bootstrap();
