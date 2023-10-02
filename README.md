@@ -335,7 +335,7 @@ Atualizar a música, id recebido nos parâmetros da rota.
 
 Deletar música, id recebido nos parâmetros da rota.
 
-**Url da requisição**: `http://localhost:3000/edf4d8f7-3094-42d9-8d70-8198201b80d4`
+**Url da requisição**: `http://localhost:3000/musics/edf4d8f7-3094-42d9-8d70-8198201b80d4`
 
 | Resposta do servidor:                                  |
 | ------------------------------------------------------ |
