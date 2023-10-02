@@ -1,73 +1,343 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="200" alt="Nest Logo" /></a>
-</p>
+#BackEnd - RiotFy
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+## Instalação e Execução
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+É necessário ter instalado em sua máquina o `Node.Js` e o gerenciador de pacotes `npm`.
+Para executar a aplicação localmente, siga estas etapas:
 
-## Description
+1. Clone este repositório.
+2. Abra o repositório no vscode. Abra um terminal para as instalações e um terminal para o postgreSQL.
+3. No terminal para o PostgreSQL, digite psql, faça o login e crie um banco de dados (CREATE DATABASE [nome do banco];).
+4. Configure as credenciais de acesso num novo arquivo `.env`, seguindo o exemplo em .env.example. Em /db, substituia por /[nome do banco].
+5. Rode os comandos:
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
-
-## Installation
-
-```bash
-$ yarn install
+```
+    npm install
+    npm install --save @nestjs/config swagger class-validator class-transformer
+    npm install prisma -D
+    npm install @prisma/client
+    npx prisma migrate dev
+    npm run start:dev
 ```
 
-## Running the app
+## Rotas da API
 
-```bash
-# development
-$ yarn run start
+| Método | Endpoint    | Responsabilidade             | Autenticação                          |
+| ------ | ----------- | ---------------------------- | ------------------------------------- |
+| POST   | /login      | Gera o token de autenticação | Qualquer usuário, não necessita token |
+| GET    | /users      | Busca usuário por token      | Qualquer usuário, obrigatório token   |
+| POST   | /users      | Criação de usuário           | Qualquer usuário, não necessita token |
+| PATCH  | /users/:id  | Atualiza um usuário          | Obrigatório token e dono da conta     |
+| DELETE | /users/:id  | Deletar usuário              | Obrigatório token e dono da conta     |
+| POST   | /musics     | Criação da música            | Usuário admin, obrigatório token      |
+| GET    | /musics     | Lista todas as músicas       | Qualquer usuário, não necessita token |
+| GET    | /musics/:id | Retornar uma música por id   | Qualquer usuário, não necessita token |
+| PATCH  | /musics/:id | Atualiza uma música por id   | Usuário admin, obrigatório token      |
+| DELETE | /musics/:id | Deletar música por id        | Usuário admin, obrigatório token      |
 
-# watch mode
-$ yarn run start:dev
+### **POST - /login**
 
-# production mode
-$ yarn run start:prod
+Rota de login do usuário.
+
+**Url da requisição**: `http://localhost:3000/login`
+
+| Dados de Envio:    |
+| ------------------ |
+| Body: Formato Json |
+
+```json
+{
+  "email": "harry@email.com",
+  "password": "12345678"
+}
 ```
 
-## Test
+| Resposta do servidor:                          |
+| ---------------------------------------------- |
+| Body: Formato Json                             |
+| Status code: <b style="color:green">200 OK</b> |
 
-```bash
-# unit tests
-$ yarn run test
-
-# e2e tests
-$ yarn run test:e2e
-
-# test coverage
-$ yarn run test:cov
+```json
+{
+  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InJhZmFlbEBlbWFpbC5jb20iLCJpYXQiOjE2OTAzMTU1MzIsImV4cCI6MTY5MDkyMDMzMiwic3ViIjoiYTk1NWRjZDctMDQxNS00MzQ3LTgxMDEtYjdkNTJmNzM0ODFjIn0"
+}
 ```
 
-## Support
+### **GET - /users**
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+Rota de listagem de usuário logado.
 
-## Stay in touch
+**Url da requisição**: `http://localhost:3000/users`
 
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+| Resposta do servidor:                          |
+| ---------------------------------------------- |
+| Body: Formato Json                             |
+| Status code: <b style="color:green">200 OK</b> |
 
-## License
+```json
+{
+  "id": "edf4d8f7-3094-42d9-8d70-8198201b80d4",
+  "name": "Harry",
+  "email": "harry@email.com"
+}
+```
 
-Nest is [MIT licensed](LICENSE).
+### **POST - /users**
+
+Rota de criação de usuário admin.
+
+**Url da requisição**: `http://localhost:3000/users`
+
+| Dados de Envio:    |
+| ------------------ |
+| Body: Formato Json |
+
+```json
+{
+  "name": "Harry",
+  "email": "harry@email.com",
+  "password": "12345678",
+  "admin": true
+}
+```
+
+| Resposta do servidor:                               |
+| --------------------------------------------------- |
+| Body: Formato Json                                  |
+| Status code: <b style="color:green">201 CREATED</b> |
+
+```json
+{
+  "id": "edf4d8f7-3094-42d9-8d70-8198201b80d4",
+  "name": "Harry",
+  "email": "harry@email.com",
+  "admin": true
+}
+```
+
+### **POST - /users**
+
+Rota de criação de usuário comum.
+
+**Url da requisição**: `http://localhost:3000/users`
+
+| Dados de Envio:    |
+| ------------------ |
+| Body: Formato Json |
+
+```json
+{
+  "name": "Harry",
+  "email": "harry1@email.com",
+  "password": "12345678"
+}
+```
+
+| Resposta do servidor:                               |
+| --------------------------------------------------- |
+| Body: Formato Json                                  |
+| Status code: <b style="color:green">201 CREATED</b> |
+
+```json
+{
+  "id": "edf4d8f7-3094-42d9-8d70-8198201b80d4",
+  "name": "Harry",
+  "email": "harry1@email.com"
+}
+```
+
+### **PATCH - /users/:id**
+
+Atualizar o úsuário dono da conta pelo id recebido nos parâmetros da rota.
+
+**Url da requisição**: `http://localhost:3000/users/edf4d8f7-3094-42d9-8d70-8198201b80d4`
+
+| Dados de Envio:    |
+| ------------------ |
+| Body: Formato Json |
+
+```json
+{
+  "name": "Harry Potter",
+  "email": "harrypotter@mail.com"
+}
+```
+
+| Resposta do servidor:                          |
+| ---------------------------------------------- |
+| Body: Formato Json                             |
+| Status code: <b style="color:green">200 OK</b> |
+
+```json
+{
+  "id": "edf4d8f7-3094-42d9-8d70-8198201b80d4",
+  "name": "Harry Potter",
+  "email": "harrypotter@mail.com"
+}
+```
+
+### **DELETE - /users/:id**
+
+Deletar o úsuário dono da conta pelo id recebido nos parâmetros da rota.
+
+**Url da requisição**: `http://localhost:3000/users/edf4d8f7-3094-42d9-8d70-8198201b80d4`
+
+| Resposta do servidor:                                  |
+| ------------------------------------------------------ |
+| Body: **Nenhum body deve ser retornado**               |
+| Status code: <b style="color:green">204 NO CONTENT</b> |
+
+```json
+
+```
+
+### **POST - /musics**
+
+Rota de criação de música.
+
+**Url da requisição**: `http://localhost:3000/musics`
+
+| Dados de Envio:    |
+| ------------------ |
+| Body: Formato Json |
+
+```json
+{
+  "name": "As We Fall",
+  "album": "As We Fall",
+  "artist": "League of Legends",
+  "genre": "Alternativa/indie",
+  "year": "2017"
+}
+```
+
+| Resposta do servidor:                               |
+| --------------------------------------------------- |
+| Body: Formato Json                                  |
+| Status code: <b style="color:green">201 CREATED</b> |
+
+```json
+{
+  "id": "edf4d8f7-3094-42d9-8d70-8198201b80d4",
+  "name": "As We Fall",
+  "album": "As We Fall",
+  "artist": "League of Legends",
+  "genre": "Alternativa/indie",
+  "year": "2017",
+  "userId": "edf4d8f7-3094-42d9-8d70-8198201b80d4"
+}
+```
+
+### **GET - /musics**
+
+Rota de listagem de todos as músicas.
+
+**Url da requisição**: `http://localhost:3000/musics`
+
+| Resposta do servidor:                          |
+| ---------------------------------------------- |
+| Body: Formato Json                             |
+| Status code: <b style="color:green">200 OK</b> |
+
+```json
+[
+  {
+    "id": "edf4d8f7-3094-42d9-8d70-8198201b80d4",
+    "name": "As We Fall",
+    "album": "As We Fall",
+    "artist": "League of Legends",
+    "genre": "Alternativa/indie",
+    "year": "2017",
+    "userId": "edf4d8f7-3094-42d9-8d70-8198201b80d4"
+  },
+  {
+    "id": "edf4d8f7-3094-42d9-8d70-8198201b80d4",
+    "name": "As We Fall",
+    "album": "As We Fall",
+    "artist": "League of Legends",
+    "genre": "Alternativa/indie",
+    "year": "2017",
+    "userId": "edf4d8f7-3094-42d9-8d70-8198201b80d4"
+  },
+  {
+    "id": "edf4d8f7-3094-42d9-8d70-8198201b80d4",
+    "name": "As We Fall",
+    "album": "As We Fall",
+    "artist": "League of Legends",
+    "genre": "Alternativa/indie",
+    "year": "2017",
+    "userId": "edf4d8f7-3094-42d9-8d70-8198201b80d4"
+  }
+]
+```
+
+### **GET - /musics/:id**
+
+Rota de listagem de música por id.
+
+**Url da requisição**: `http://localhost:3000/musics/edf4d8f7-3094-42d9-8d70-8198201b80d4`
+
+| Resposta do servidor:                          |
+| ---------------------------------------------- |
+| Body: Formato Json                             |
+| Status code: <b style="color:green">200 OK</b> |
+
+```json
+{
+  "id": "edf4d8f7-3094-42d9-8d70-8198201b80d4",
+  "name": "As We Fall",
+  "album": "As We Fall",
+  "artist": "League of Legends",
+  "genre": "Alternativa/indie",
+  "year": "2017",
+  "userId": "edf4d8f7-3094-42d9-8d70-8198201b80d4"
+}
+```
+
+### **PATCH - /musics/:id**
+
+Atualizar a música, id recebido nos parâmetros da rota.
+
+**Url da requisição**: `http://localhost:3000/musics/edf4d8f7-3094-42d9-8d70-8198201b80d4`
+
+| Dados de Envio:    |
+| ------------------ |
+| Body: Formato Json |
+
+```json
+{
+  "name": "As We Fall modificado",
+  "album": "As We Fall modificado",
+  "artist": "League of Legends modificado",
+  "genre": "Alternativa/indie modificado",
+  "year": "201777"
+}
+```
+
+| Resposta do servidor:                          |
+| ---------------------------------------------- |
+| Body: Formato Json                             |
+| Status code: <b style="color:green">200 OK</b> |
+
+```json
+{
+  "id": "edf4d8f7-3094-42d9-8d70-8198201b80d4",
+  "name": "As We Fall modificado",
+  "album": "As We Fall modificado",
+  "artist": "League of Legends modificado",
+  "genre": "Alternativa/indie modificado",
+  "year": "201777",
+  "userId": "edf4d8f7-3094-42d9-8d70-8198201b80d4"
+}
+```
+
+### **DELETE - /musics/:id**
+
+Deletar música, id recebido nos parâmetros da rota.
+
+**Url da requisição**: `http://localhost:3000/edf4d8f7-3094-42d9-8d70-8198201b80d4`
+
+| Resposta do servidor:                                  |
+| ------------------------------------------------------ |
+| Body: **Nenhum body deve ser retornado**               |
+| Status code: <b style="color:green">204 NO CONTENT</b> |
