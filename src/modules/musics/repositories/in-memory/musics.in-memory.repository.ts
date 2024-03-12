@@ -1,4 +1,3 @@
-import { NotFoundException } from '@nestjs/common';
 import { CreateMusicDto } from '../../dtos/create-music.dto';
 import { UpdateMusicDto } from '../../dtos/update-music.dto';
 import { Music } from '../../entities/music.entity';
