@@ -73,7 +73,7 @@
     "@types/cors": "^2.8.17"
   },
   "engines": {
-    "node": "18"
+    "node": "16"
   },
   "jest": {
     "moduleFileExtensions": [
