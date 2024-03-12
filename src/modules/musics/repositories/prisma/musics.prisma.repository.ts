@@ -2,8 +2,8 @@ import { UpdateMusicDto } from './../../dtos/update-music.dto';
 import { CreateMusicDto } from './../../dtos/create-music.dto';
 import { MusicsRepository } from '../musics.repository';
 import { Music } from '../../entities/music.entity';
-import { PrismaService } from 'src/database/prisma.service';
 import { Injectable } from '@nestjs/common';
+import { PrismaService } from '@/database/prisma.service';
 
 @Injectable()
 export class MusicsPrismaRepository implements MusicsRepository {
