@@ -2,12 +2,12 @@ import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { ValidationPipe } from '@nestjs/common';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
-// {
-//   origin: ['https://riotfy-web.vercel.app/'],
-// }
+
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
-  app.enableCors();
+  app.enableCors({
+    origin: ['https://riotfy-web.vercel.app/'],
+  });
   const config = new DocumentBuilder()
     .setTitle('RiotFy')
     .setDescription('music player riot')
