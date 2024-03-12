@@ -5,7 +5,7 @@ import { MusicsRepository } from './repositories/musics.repository';
 import { MusicsPrismaRepository } from './repositories/prisma/musics.prisma.repository';
 import { MulterModule } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
-import { PrismaService } from '@/database/prisma.service';
+import { PrismaService } from '../../database/prisma.service';
 
 @Module({
   imports: [
