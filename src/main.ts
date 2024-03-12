@@ -5,9 +5,8 @@ import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
-  app.enableCors({
-    origin: ['https://riotfy-web.vercel.app/'],
-  });
+  app.enableCors();
+
   const config = new DocumentBuilder()
     .setTitle('RiotFy')
     .setDescription('music player riot')
