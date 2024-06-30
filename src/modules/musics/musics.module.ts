@@ -17,10 +17,17 @@ import { PrismaService } from '../../database/prisma.service';
         },
       }),
       fileFilter: (_, file, cb) => {
-        if (file.mimetype === 'image/jpeg' || file.mimetype === 'audio/mpeg') {
+        if (
+          file.mimetype === 'image/jpeg' ||
+          file.mimetype === 'image/webp' ||
+          file.mimetype === 'audio/mpeg'
+        ) {
           cb(null, true);
         } else {
-          cb(new BadRequestException('Only jpeg format allowed'), false);
+          cb(
+            new BadRequestException('Only jpeg && webp format allowed'),
+            false,
+          );
         }
       },
     }),
